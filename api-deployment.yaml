@@ -31,6 +31,14 @@ spec:
                 secretKeyRef:
                   name: short-api-secret
                   key: DATABASE_URL
+          volumeMounts:
+            - name: test
+              mountPath: /etc/test
+              readOnly: true
+      volumes:
+        - name: test
+          configMap:
+            name: demo-config
 
 # DATABASE_URL - Переменная для подключения БД
 # postgresql://user:password@url:port/database - Вид строки подключения
