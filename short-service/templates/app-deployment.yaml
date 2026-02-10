@@ -1,28 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: short-app-deployment
+  name: {{ .Values.app.name }}-deployment
 #  namespace: my-namespace
 spec:
-  replicas: 1
+  replicas: {{ .Values.app.replicas }} 
   selector:
     matchLabels:
-      components: frontend
+      components:  {{ .Values.app.components }}
   template:
     metadata:
       labels:
-        components: frontend
+        components:  {{ .Values.app.components }}
     #lables - может быть любым, даже test: pepepe
     spec:
       containers:
-        - name: short-app
-          image: antonlarichev/short-app:v1.4
+        - name: {{ .Values.app.name }}
+          image: "{{ .Values.app.image }}:{{ .Values.app.version }}"
           ports: 
-            - containerPort: 80
+            - containerPort: {{ .Values.app.port }}
           resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
-            requests:
-              memory: "128Mi"
-              cpu: "500m"
+            limits: {{ .Values.app.limits | toYaml | nindent 14 }}
+            requests: {{ .Values.app.limits | toYaml | nindent 14 }}
+# toYaml - переводит в ямл
+# nintent - добовляет отступы. Самим нужно посчитать сколько нужно считаем внутренюю структуру)
+# helm install --debug --dry-run sort-service-release ./short-service - строка проверки до запуска
