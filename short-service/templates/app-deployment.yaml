@@ -21,7 +21,7 @@ spec:
             - containerPort: {{ .Values.app.port }}
           resources:
             limits: {{ .Values.app.limits | toYaml | nindent 14 }}
-            requests: {{ .Values.app.limits | toYaml | nindent 14 }}
+            requests: {{ .Values.app.requests | toYaml | nindent 14 }}
 # toYaml - переводит в ямл
 # nintent - добовляет отступы. Самим нужно посчитать сколько нужно считаем внутренюю структуру)
 # helm install --debug --dry-run sort-service-release ./short-service - строка проверки до запуска

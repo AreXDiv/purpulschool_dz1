@@ -1,6 +1,49 @@
+{{- define "chart.labels" }}
+  labels:
+    date: {{ now | htmlDate }}
+    version: {{ .Values.app.version  }}
+{{- end }}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: demo-config
+  {{- template "chart.labels" . }}
+  lebels2:
+    {{- include "chart2.labels" . | indent 4}}
 data:
-  name: {{ .Values.name | quote | upper }}
+  name: {{ .Values.app.version | upper | quote  }}
+  {{- if eq .Values.env "production" }}
+  paymentToken: "1234"
+  {{- else }}
+  paymentToken: false
+  {{- end }}
+  {{- with .Values.value.requirements.limits }}
+  memory: {{ .memory }}
+  cpu: {{ .cpu }}
+  version: {{ $.Values.app.version }}
+  releaseName: {{ $.Release.Name }}
+  {{- end }}
+  users: |-
+    {{- range .Values.users}}
+    - {{ . }}
+    {{- end}}
+  users2:
+    {{- range .Values.users2}}
+    {{ .name }}: {{ .role }}
+    {{- end}}
+  # переменные присвоили переменной значение 1, потом вывели | обявить переменную можно выше и использовать в нижестоящей части
+  {{- $map := 1}}
+  map: {{ $map }}
+  {{- $map2 := .Release.Name | upper | quote }}
+  map2: {{ $map2 }}
+  users3:
+    {{- range $index, $user := .Values.users2}}
+    {{ $user.name }}: "{{ $user.role }} - {{ $index }}"
+    {{- end}}
+  # Tupl
+  users4: |-
+    {{- range tuple "Vlad" "Poly" "Sima"}}
+    - {{ . }}
+    {{- end}}
+

@@ -11,3 +11,59 @@ app:
   requests:
       memory: "128Mi"
       cpu: "500m"
+
+api:
+  name: short-api
+  image: antonlarichev/short-api
+  version: v1.0
+  components: backend
+  port: 3000
+  replicas: 1
+  limits:
+    memory: "500Mi"
+    cpu: "500m"
+  requests:
+    memory: "500Mi"
+    cpu: "500m"
+  envs: 
+    -  DATABASE_URL
+
+database:
+  user: demo
+  password: demo
+  db: demo
+
+postgres:
+  name: postgres
+  image: postgres
+  version: 16.0
+  components: postges
+  port: 5432
+  limits:
+    memory: "500Mi"
+    cpu: "500m"
+  requests:
+    memory: "500Mi"
+    cpu: "500m"
+  envs:
+    -  POSTGRES_DB
+    -  POSTGRES_USER
+    -  POSTGRES_PASSWORD
+
+env: productio
+value:
+  requirements:
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+
+users:
+  - Vlad
+  - Poly
+
+users2:
+  - name: Vlad
+    role: admin
+  - name: Poly
+    role: proger
+# Vlad: admin
